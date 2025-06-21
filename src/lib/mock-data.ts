@@ -1,4 +1,4 @@
-import type { Artist, Event } from './types';
+import type { Artist, Event, User } from './types';
 
 export const events: Event[] = [
   {
@@ -114,5 +114,25 @@ export const artists: Artist[] = [
         { name: 'Matt', instrument: 'Drums', socials: {} },
       ],
     },
+  },
+];
+
+export const users: User[] = [
+  {
+    id: 1,
+    name: 'Alex Fan',
+    password: 'password',
+    bookedTickets: [
+      { eventId: 1, quantity: 2 },
+      { eventId: 3, quantity: 1 },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Sam Musiclover',
+    password: 'password',
+    bookedTickets: [
+      { eventId: 2, quantity: 4 },
+    ],
   },
 ];

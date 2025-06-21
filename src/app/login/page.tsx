@@ -9,54 +9,90 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Header } from '@/components/Header';
 import { useToast } from "@/hooks/use-toast"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { FormEvent } from 'react';
 
-export default function LoginPage() {
+function LoginForm({
+  userType,
+  onLogin,
+}: {
+  userType: 'audience' | 'artist';
+  onLogin: (success: boolean) => void;
+}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const success = login(username, password, userType);
+    onLogin(success);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor={`${userType}-username`}>{userType === 'artist' ? 'Band Name' : 'Username'}</Label>
+          <Input id={`${userType}-username`} type="text" placeholder={userType === 'artist' ? 'e.g. Echo Drifters' : 'e.g. Alex Fan'} required value={username} onChange={(e) => setUsername(e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor={`${userType}-password`}>Password</Label>
+          <Input id={`${userType}-password`} type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button type="submit" className="w-full">Sign In</Button>
+      </CardFooter>
+    </form>
+  );
+}
+
+export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const success = login(username, password);
+  const handleLogin = (success: boolean, userType: 'audience' | 'artist') => {
     if (success) {
-      router.push('/artist');
+      router.push(userType === 'artist' ? '/artist' : '/profile');
     } else {
       toast({
         variant: "destructive",
         title: "Login Failed",
         description: "Invalid username or password.",
-      })
+      });
     }
   };
 
   return (
     <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex flex-1 items-center justify-center p-4">
-             <Card className="w-full max-w-sm">
-                <CardHeader>
-                    <CardTitle className="text-2xl font-headline">Artist Login</CardTitle>
-                    <CardDescription>Enter your band name and password to access your dashboard.</CardDescription>
-                </CardHeader>
-                <form onSubmit={handleSubmit}>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="username">Band Name</Label>
-                            <Input id="username" type="text" placeholder="e.g. Echo Drifters" required value={username} onChange={(e) => setUsername(e.target.value)} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-                        </div>
-                    </CardContent>
-                    <CardFooter>
-                        <Button type="submit" className="w-full">Sign In</Button>
-                    </CardFooter>
-                </form>
+      <Header />
+      <main className="flex flex-1 items-center justify-center p-4">
+        <Tabs defaultValue="audience" className="w-full max-w-sm">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="audience">Audience</TabsTrigger>
+            <TabsTrigger value="artist">Artist</TabsTrigger>
+          </TabsList>
+          <TabsContent value="audience">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl font-headline">Audience Login</CardTitle>
+                <CardDescription>Sign in to view your profile and tickets.</CardDescription>
+              </CardHeader>
+              <LoginForm userType="audience" onLogin={(success) => handleLogin(success, 'audience')} />
             </Card>
-        </main>
+          </TabsContent>
+          <TabsContent value="artist">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl font-headline">Artist Login</CardTitle>
+                <CardDescription>Enter your band name and password to access your dashboard.</CardDescription>
+              </CardHeader>
+              <LoginForm userType="artist" onLogin={(success) => handleLogin(success, 'artist')} />
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </main>
     </div>
   );
 }

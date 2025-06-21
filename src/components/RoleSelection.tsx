@@ -29,7 +29,7 @@ export function RoleSelection() {
             </p>
             <Button asChild className="w-full">
               <Link href="/audience">
-                Join as Audience <ArrowRight className="ml-2 h-4 w-4" />
+                Browse Events <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>
@@ -50,7 +50,7 @@ export function RoleSelection() {
             </p>
             <Button asChild className="w-full">
               <Link href="/artist">
-                Register as Artist <ArrowRight className="ml-2 h-4 w-4" />
+                Artist Dashboard <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </CardContent>

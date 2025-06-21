@@ -33,3 +33,15 @@ export interface Event {
   artistId: number;
   aiHint: string;
 }
+
+export interface BookedTicket {
+  eventId: number;
+  quantity: number;
+}
+
+export interface User {
+  id: number;
+  name:string;
+  password?: string;
+  bookedTickets: BookedTicket[];
+}

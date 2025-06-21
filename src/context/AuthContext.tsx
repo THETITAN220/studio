@@ -1,12 +1,15 @@
 'use client';
 
-import type { Artist } from '@/lib/types';
-import { artists } from '@/lib/mock-data';
+import type { Artist, User } from '@/lib/types';
+import { artists, users } from '@/lib/mock-data';
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
+type UserType = 'artist' | 'audience';
+
 interface AuthContextType {
-  artist: Artist | null;
-  login: (name: string, pass: string) => boolean;
+  user: (Artist | User) | null;
+  userType: UserType | null;
+  login: (name: string, pass: string, type: UserType) => boolean;
   logout: () => void;
   isLoading: boolean;
 }
@@ -14,17 +17,26 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [artist, setArtist] = useState<Artist | null>(null);
+  const [user, setUser] = useState<Artist | User | null>(null);
+  const [userType, setUserType] = useState<UserType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check sessionStorage for a logged-in user on initial load
     try {
-      const storedArtistId = sessionStorage.getItem('artistId');
-      if (storedArtistId) {
-        const loggedInArtist = artists.find(a => a.id === parseInt(storedArtistId, 10));
-        if (loggedInArtist) {
-          setArtist(loggedInArtist);
+      const storedUserId = sessionStorage.getItem('userId');
+      const storedUserType = sessionStorage.getItem('userType') as UserType | null;
+      
+      if (storedUserId && storedUserType) {
+        let loggedInUser;
+        if (storedUserType === 'artist') {
+            loggedInUser = artists.find(a => a.id === parseInt(storedUserId, 10));
+        } else {
+            loggedInUser = users.find(u => u.id === parseInt(storedUserId, 10));
+        }
+        
+        if (loggedInUser) {
+          setUser(loggedInUser);
+          setUserType(storedUserType);
         }
       }
     } catch (error) {
@@ -34,12 +46,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = (name: string, pass: string): boolean => {
-    const foundArtist = artists.find(a => a.name.toLowerCase() === name.toLowerCase() && a.password === pass);
-    if (foundArtist) {
-      setArtist(foundArtist);
+  const login = (name: string, pass: string, type: UserType): boolean => {
+    let foundUser;
+    if (type === 'artist') {
+        foundUser = artists.find(a => a.name.toLowerCase() === name.toLowerCase() && a.password === pass);
+    } else {
+        foundUser = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.password === pass);
+    }
+    
+    if (foundUser) {
+      setUser(foundUser);
+      setUserType(type);
       try {
-        sessionStorage.setItem('artistId', String(foundArtist.id));
+        sessionStorage.setItem('userId', String(foundUser.id));
+        sessionStorage.setItem('userType', type);
       } catch (error) {
         console.error("Could not access session storage", error)
       }
@@ -49,16 +69,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    setArtist(null);
+    setUser(null);
+    setUserType(null);
     try {
-      sessionStorage.removeItem('artistId');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('userType');
     } catch (error) {
         console.error("Could not access session storage", error)
     }
   };
 
   return (
-    <AuthContext.Provider value={{ artist, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, userType, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

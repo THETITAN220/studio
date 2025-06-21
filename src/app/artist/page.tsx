@@ -8,27 +8,31 @@ import { FollowerStats } from '@/components/FollowerStats';
 import { BandProfileForm } from '@/components/BandProfileForm';
 import { OpenMicRegistration } from '@/components/OpenMicRegistration';
 import { ArtistLeaderboard } from '@/components/ArtistLeaderboard';
+import { MyShows } from '@/components/MyShows';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { artists } from '@/lib/mock-data';
-import { Mic, Trophy, UserCircle, Loader2 } from 'lucide-react';
+import { Mic, Trophy, UserCircle, Loader2, Music } from 'lucide-react';
+import type { Artist } from '@/lib/types';
 
 export default function ArtistPage() {
-  const { artist, isLoading } = useAuth();
+  const { user, userType, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !artist) {
+    if (!isLoading && (userType !== 'artist' || !user)) {
       router.replace('/login');
     }
-  }, [artist, isLoading, router]);
+  }, [user, userType, isLoading, router]);
 
-  if (isLoading || !artist) {
+  if (isLoading || !user || userType !== 'artist') {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
+  
+  const artist = user as Artist;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -47,13 +51,17 @@ export default function ArtistPage() {
           <FollowerStats artist={artist} />
 
           <Tabs defaultValue="profile" className="mt-12">
-            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
+            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-4">
               <TabsTrigger value="profile"><UserCircle className="mr-2 h-4 w-4" />Band Profile</TabsTrigger>
-              <TabsTrigger value="register"><Mic className="mr-2 h-4 w-4" />Open Mic Registration</TabsTrigger>
+              <TabsTrigger value="shows"><Music className="mr-2 h-4 w-4" />My Shows</TabsTrigger>
+              <TabsTrigger value="register"><Mic className="mr-2 h-4 w-4" />Open Mic</TabsTrigger>
               <TabsTrigger value="leaderboard"><Trophy className="mr-2 h-4 w-4" />Leaderboard</TabsTrigger>
             </TabsList>
             <TabsContent value="profile" className="mt-6">
               <BandProfileForm artist={artist} />
+            </TabsContent>
+            <TabsContent value="shows" className="mt-6">
+              <MyShows artist={artist} />
             </TabsContent>
             <TabsContent value="register" className="mt-6">
               <OpenMicRegistration />
