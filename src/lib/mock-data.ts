@@ -8,6 +8,7 @@ export const events: Event[] = [
     venue: 'The Gilded Lily',
     imageUrl: 'https://placehold.co/600x400.png',
     artist: 'Luna Bloom',
+    artistId: 1,
     aiHint: 'acoustic guitar concert'
   },
   {
@@ -17,6 +18,7 @@ export const events: Event[] = [
     venue: 'The Velvet Underground',
     imageUrl: 'https://placehold.co/600x400.png',
     artist: 'Echo Drifters',
+    artistId: 2,
     aiHint: 'rock band stage'
   },
   {
@@ -26,6 +28,7 @@ export const events: Event[] = [
     venue: 'The Blue Note Cafe',
     imageUrl: 'https://placehold.co/600x400.png',
     artist: 'Rivertown Roots',
+    artistId: 3,
     aiHint: 'jazz club musician'
   },
 ];

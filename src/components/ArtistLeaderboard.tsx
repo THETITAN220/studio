@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import type { Artist } from '@/lib/types';
@@ -43,7 +44,9 @@ export function ArtistLeaderboard({ artists }: ArtistLeaderboardProps) {
                     data-ai-hint="musician portrait"
                   />
                   <div>
-                    <div className="font-medium">{artist.name}</div>
+                    <Link href={`/artist/${artist.id}`} className="font-medium hover:underline hover:text-primary transition-colors">
+                      {artist.name}
+                    </Link>
                     <div className="text-sm text-muted-foreground truncate max-w-xs hidden sm:block">{artist.bio}</div>
                   </div>
                 </div>

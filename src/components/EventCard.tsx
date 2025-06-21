@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,9 @@ export function EventCard({ event }: EventCardProps) {
           data-ai-hint={event.aiHint}
         />
          <div className="absolute top-0 right-0 bg-background/80 backdrop-blur-sm p-2 rounded-bl-lg">
-          <p className="text-sm font-bold text-primary">{event.artist}</p>
+           <Link href={`/artist/${event.artistId}`} className="text-sm font-bold text-primary hover:underline transition-colors">
+            {event.artist}
+          </Link>
         </div>
       </div>
       <CardHeader>

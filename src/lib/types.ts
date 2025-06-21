@@ -30,5 +30,6 @@ export interface Event {
   venue: string;
   imageUrl: string;
   artist: string;
+  artistId: number;
   aiHint: string;
 }
