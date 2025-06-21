@@ -10,6 +10,7 @@ export interface BandMember {
 export interface Artist {
   id: number;
   name: string;
+  password?: string;
   bio: string;
   followers: number;
   bandFollowers: number;

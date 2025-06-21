@@ -1,14 +1,23 @@
+'use client';
+
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { Event } from '@/lib/types';
-import { Calendar, MapPin, Ticket, Star } from 'lucide-react';
+import { Calendar, MapPin, Ticket, Star, Plus, Minus } from 'lucide-react';
 
 interface EventCardProps {
   event: Event;
 }
 
 export function EventCard({ event }: EventCardProps) {
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantityChange = (amount: number) => {
+    setQuantity(prev => Math.max(1, prev + amount));
+  };
+
   return (
     <Card className="overflow-hidden flex flex-col group hover:shadow-accent/20 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
       <div className="relative overflow-hidden">
@@ -38,7 +47,19 @@ export function EventCard({ event }: EventCardProps) {
         </div>
       </CardHeader>
       <CardContent className="flex-grow flex flex-col mt-auto">
-        <div className="mt-auto space-y-2">
+        <div className="mt-auto space-y-4">
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-center">Ticket Quantity</p>
+            <div className="flex items-center justify-center gap-4">
+              <Button variant="outline" size="icon" onClick={() => handleQuantityChange(-1)} disabled={quantity <= 1}>
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="text-lg font-bold w-12 text-center">{quantity}</span>
+              <Button variant="outline" size="icon" onClick={() => handleQuantityChange(1)}>
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
            <Button className="w-full">
             <Ticket className="mr-2 h-4 w-4" />
             Buy Tickets

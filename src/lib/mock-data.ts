@@ -34,6 +34,7 @@ export const artists: Artist[] = [
   {
     id: 1,
     name: 'Luna Bloom',
+    password: 'password',
     bio: 'Solo artist with a dreamy voice and a guitar, weaving tales of love and loss through ethereal folk-pop melodies.',
     followers: 1245,
     bandFollowers: 0,
@@ -44,6 +45,7 @@ export const artists: Artist[] = [
   {
     id: 2,
     name: 'Echo Drifters',
+    password: 'password',
     bio: 'A four-piece indie rock band known for their energetic live shows and anthemic choruses that get the crowd moving.',
     followers: 850,
     bandFollowers: 3400,
@@ -63,6 +65,7 @@ export const artists: Artist[] = [
   {
     id: 3,
     name: 'Rivertown Roots',
+    password: 'password',
     bio: 'Bringing the heart of blues and the soul of jazz to the modern age. A collective of seasoned musicians who live for the groove.',
     followers: 630,
     bandFollowers: 2100,
@@ -81,11 +84,32 @@ export const artists: Artist[] = [
   {
     id: 4,
     name: 'Starlight Sirens',
+    password: 'password',
     bio: 'Synth-pop duo creating cosmic soundscapes with powerful vocals. Their music is an escape to another dimension.',
     followers: 450,
     bandFollowers: 1500,
     engagement: 85,
     ticketsSold: 210,
     avatarUrl: 'https://placehold.co/100x100.png',
+  },
+  {
+    id: 5,
+    name: 'AntarticMonkeys',
+    password: 'password',
+    bio: 'Indie rock sensations from the south pole. Known for their chilly riffs and warm vocals.',
+    followers: 2024,
+    bandFollowers: 8600,
+    engagement: 99,
+    ticketsSold: 780,
+    avatarUrl: 'https://placehold.co/100x100.png',
+    band: {
+      name: 'AntarticMonkeys',
+      members: [
+        { name: 'Alex', instrument: 'Vocals, Guitar', socials: {} },
+        { name: 'Jamie', instrument: 'Guitar', socials: {} },
+        { name: 'Nick', instrument: 'Bass', socials: {} },
+        { name: 'Matt', instrument: 'Drums', socials: {} },
+      ],
+    },
   },
 ];

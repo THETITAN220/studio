@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { Header } from '@/components/Header';
 import { FollowerStats } from '@/components/FollowerStats';
 import { BandProfileForm } from '@/components/BandProfileForm';
@@ -5,10 +10,25 @@ import { OpenMicRegistration } from '@/components/OpenMicRegistration';
 import { ArtistLeaderboard } from '@/components/ArtistLeaderboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { artists } from '@/lib/mock-data';
-import { Mic, Trophy, UserCircle } from 'lucide-react';
+import { Mic, Trophy, UserCircle, Loader2 } from 'lucide-react';
 
 export default function ArtistPage() {
-  const artist = artists[1]; // Use Echo Drifters as example
+  const { artist, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !artist) {
+      router.replace('/login');
+    }
+  }, [artist, isLoading, router]);
+
+  if (isLoading || !artist) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -20,7 +40,7 @@ export default function ArtistPage() {
               Artist Dashboard
             </h1>
             <p className="text-lg text-muted-foreground mt-2">
-              Manage your profile, register for events, and track your growth.
+              Welcome, {artist.name}. Manage your profile, register for events, and track your growth.
             </p>
           </div>
 
