@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { VibeMicLogo } from '@/components/VibeMicLogo';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
   return (
@@ -9,6 +10,9 @@ export function Header() {
           <VibeMicLogo className="h-6 w-6" />
           <span className="text-xl font-headline">Vibe n Mic</span>
         </Link>
+        <div className="ml-auto flex items-center">
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
